@@ -7,14 +7,21 @@ Created on 2016.10
 
 import datetime
 import requests
+import configparser
 from utility.createHTMLReport import *
 from utility.logger import Logger
-from utility.config import getconfig
 from selenium import webdriver
 
-
+conf = configparser.ConfigParser()
+conf.read('./config.ini')
 #parent_path = os.path.realpath(os.path.join(os.getcwd(), ".."))
-local_version1,local_version2,old_version,new_version,IP,cycle,title=getconfig.getparameters('./config.ini')
+title = conf.get("Title", "title")
+local_version1 = conf.get("Firmware", "local_version1")
+local_version2 = conf.get("Firmware", "local_version2")
+old_version = conf.get("Firmware", "old_version")
+new_version = conf.get("Firmware", "new_version")
+IP = conf.get("IPAddress", "IP")
+cycle = conf.get("Running_cycle", "cycle")
 #driver = webdriver.Chrome("%s\chromedriver2.9.exe"%os.getcwd())
 driver = webdriver.Firefox()
 driver.get(IP) #open setting page
@@ -74,7 +81,7 @@ def find_element(element):
     if i==repeat:
         logging.log(logging.INFO, "Can not find relevant element [%s]! Please check your network!"%element)
         logging.log(logging.INFO, "Please restart test!.............")
-		screenshot("Cannot_find_element")
+        screenshot("Cannot_find_element")
         sys.exit()
         return
 
